@@ -28,7 +28,7 @@ class Fraction(object):
         self.denominator = int(denominator)
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
     #setting data methods
-    def setArgument(self , numerator , denominator):
+    def setArguments(self , numerator , denominator):
         """ sets the numerator and the denominator of the fractional data"""
         self.numerator =int(numerator)
         self.denominator = int(denominator)
@@ -41,12 +41,17 @@ class Fraction(object):
         """ sets the denominator of the fractional data """
         self.denominator = int(denominator)
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
+
+    #getting data methods
     def getNumerator(self):
         """ Returns the numerator """
         return self.numerator
     def getDenominator(self):
         """ Returns the denominator """
         return self.denominator
+    def getResult(self):
+        """ Returns the fraction value """
+        return self.result
     def getFloatingResult(self):
         """ Returns the result of the division of the numerator and the denominator """
         return float(self.numerator)/self.denominator
