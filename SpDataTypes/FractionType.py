@@ -148,34 +148,34 @@ class Fraction(object):
         return temp
     def __lt__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator < float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() < fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator < fr
+            return self.getFloatingResult() < fr
     def __gt__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator > float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() > fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator > fr
+            return self.getFloatingResult() > fr
     def __eq__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator == float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() == fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator == fr
+            return self.getFloatingResult() == fr
     def __ne__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator != float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() != fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator != fr
+            return self.getFloatingResult() != fr
     def __le__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator <= float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() <= fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator <= fr
+            return self.getFloatingResult() <= fr
     def __ge__(self , fr):
         if(fr.__class__.__name__ == "Fraction"):
-            return float(self.numerator)/self.denominator >= float(fr.numerator)/fr.denominator
+            return self.getFloatingResult() >= fr.getFloatingResult()
         else:
-            return float(self.numerator)/self.denominator >= fr
+            return self.getFloatingResult() >= fr
 
     #data manipulation methods
     def setValue(self , value):
