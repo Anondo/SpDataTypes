@@ -26,12 +26,14 @@ class Fraction(object):
     def __init__(self , numerator = 1 , denominator = 1):
         self.numerator = int(numerator)
         self.denominator = int(denominator)
+        self.checkDennominator()
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
     #setting data methods
     def setArguments(self , numerator , denominator):
         """ sets the numerator and the denominator of the fractional data"""
         self.numerator =int(numerator)
         self.denominator = int(denominator)
+        self.checkDennominator()
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
     def setNumerator(self , numerator):
         """ sets the numerator of the fractional data """
@@ -40,6 +42,7 @@ class Fraction(object):
     def setDenominator(self , denominator):
         """ sets the denominator of the fractional data """
         self.denominator = int(denominator)
+        self.checkDennominator()
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
 
     #getting data methods
@@ -60,14 +63,14 @@ class Fraction(object):
     def __str__(self):
         return self.result
     def __add__(self , fr):
-        val1 = float(self.numerator)/ self.denominator
+        val1 = self.getFloatingResult()
         if(fr.__class__.__name__ == "Fraction"): #if the second parameter of the + operator is a Fraction object
-            val2 = float(fr.numerator) / fr.denominator
+            val2 = fr.getFloatingResult()
         else: # else a digit
             fr = float(fr)
             temp = Fraction()
             temp.setValue(fr)
-            val2 = float(temp.numerator) / temp.denominator
+            val2 = temp.getFloatingResult()
         total = val1 + val2
         total = self.reducePrecision(total)
         temp = Fraction()
@@ -77,66 +80,67 @@ class Fraction(object):
         val = float(val)
         temp = Fraction()
         temp.setValue(val)
-        val1 = float(temp.numerator) / temp.denominator
-        val2 = float(self.numerator)/ self.denominator
+        val1 = temp.getFloatingResult()
+        val2 = self.getFloatingResult()
         total = val1 + val2
         temp.setValue(total)
         return temp
     def __sub__(self , fr):
-        val1 = float(self.numerator)/ self.denominator
+        val1 = self.getFloatingResult()
         if(fr.__class__.__name__ == "Fraction"):
-            val2 = float(fr.numerator) / fr.denominator
+            val2 = fr.getFloatingResult()
         else:
             fr = float(fr)
             temp = Fraction()
             temp.setValue(fr)
-            val2 = float(temp.numerator) / temp.denominator
+            val2 = temp.getFloatingResult()
         diff = val1 - val2
         diff = self.reducePrecision(diff)
         temp = Fraction()
         temp.setValue(diff)
+
         return temp
     def __rsub__(self , val):
         val = float(val)
         temp = Fraction()
         temp.setValue(val)
-        val1 = float(temp.numerator) / temp.denominator
-        val2 = float(self.numerator)/ self.denominator
+        val1 = temp.getFloatingResult()
+        val2 =  self.getFloatingResult()
         diff = val1 - val2
         temp.setValue(diff)
         return temp
     def __mul__(self , fr):
-        val1 = float(self.numerator)/ self.denominator
+        val1 = self.getFloatingResult()
         if(fr.__class__.__name__ == "Fraction"):
-            val2 = float(fr.numerator) / fr.denominator
+            val2 =  fr.getFloatingResult()
         else:
             fr = float(fr)
             temp = Fraction()
             temp.setValue(fr)
-            val2 = float(temp.numerator) / temp.denominator
+            val2 = temp.getFloatingResult()
         product = val1 * val2
         product = self.reducePrecision(product)
         temp = Fraction()
         temp.setValue(product)
         return temp
-    def __rmul__(self , val):
+    def __rmul__(self , val):                                                 #temp.getFloatingResult()  self.getFloatingResult() fr.getFloatingResult()
         val = float(val)
         temp = Fraction()
         temp.setValue(val)
-        val1 = float(temp.numerator) / temp.denominator
-        val2 = float(self.numerator)/ self.denominator
+        val1 = temp.getFloatingResult()
+        val2 = self.getFloatingResult()
         product = val1 * val2
         temp.setValue(product)
         return temp
     def __div__(self , fr):
-        val1 = float(self.numerator)/ self.denominator
+        val1 = self.getFloatingResult()
         if(fr.__class__.__name__ == "Fraction"):
             val2 = float(fr.numerator) / fr.denominator
         else:
             fr = float(fr)
             temp = Fraction()
             temp.setValue(fr)
-            val2 = float(temp.numerator) / temp.denominator
+            val2 = temp.getFloatingResult()
         answer = val1 / val2
         answer = self.reducePrecision(answer)
         temp = Fraction()
@@ -146,8 +150,8 @@ class Fraction(object):
         val = float(val)
         temp = Fraction()
         temp.setValue(val)
-        val1 = float(temp.numerator) / temp.denominator
-        val2 = float(self.numerator)/ self.denominator
+        val1 = temp.getFloatingResult()
+        val2 = self.getFloatingResult()
         answer = val1 / val2
         temp.setValue(answer)
         return temp
@@ -183,6 +187,10 @@ class Fraction(object):
             return self.getFloatingResult() >= fr
 
     #data manipulation methods
+    def checkDennominator(self):
+        if(self.denominator == 0):
+            print "Alert: Assigning value 1 to the denominator to avoid zero division error!"
+            self.denominator = 0
     def setValue(self , value):
         """ sets the data in a fractional format """
         value = float(value)
@@ -194,20 +202,20 @@ class Fraction(object):
         afterDec = str(value).split(".")[1] #extracting the digits after decimal point
         self.denominator = int("1" + len(afterDec) * "0") #seting denominator depending on the length of the digits after point.
         self.result = "(" + str(self.numerator) + "/" + str(self.denominator) + ")"
-        self.applyCancellation() #starts looking for common divisors and starts cancelling
-    def applyCancellation(self):
+        self.cancelOut() #starts looking for common divisors and starts cancelling
+    def cancelOut(self):
         """ The data is reduced to the lowest terms using cancellation """
-        if(self.numerator > self.denominator): #depending on which of the data is bigger,the matching of common divisor will beign
+        if(abs(self.numerator) > abs(self.denominator)): #depending on which of the data is bigger,the matching of common divisor will beign
             for num in [self.denominator] + range(abs(int(self.denominator))/2, 1 , -1): #the range of data to check will be from the numerator/denominator itself then from the half of its value to 2
-                self.divideToCancel(num)
+                self.cancel(num)
                 if(self.denominator == 1):
                     break
         else:
             for num in [self.denominator] + range(abs(int(self.numerator))/2, 1 , -1): #the range of data to check will be from the numerator/denominator itself then from the half of its value to 2
-                self.divideToCancel(num)
+                self.cancel(num)
                 if(self.numerator == 1):
                     break
-    def divideToCancel(self , num):
+    def cancel(self , num):
         """ Checks for the common divisor and applies cancellation """
         if(self.numerator % num == 0 and self.denominator % num == 0): # if there is a common divisor
             self.numerator /= num #apply division
